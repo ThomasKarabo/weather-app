@@ -1,34 +1,108 @@
-# Weather App
+# 🌦️ Johannesburg Weather Forecast App
 
-This project is a Streamlit application that displays current and historical weather data for Johannesburg, South Africa, using the Open-Meteo API. It also trains and serves a VAR (Vector Autoregression) model for weather forecasting.
-
-## Features
-- Fetches and stores historical weather data (from 2005 to recent date) in a local SQLite database.
-- Trains a VAR model on the historical data for multi-day weather forecasting.
-- Displays current weather (temperature, windspeed, wind direction, precipitation, humidity) using the Open-Meteo API.
-- Shows yesterday's weather in a table format.
-- Visualizes 7-day weather forecasts (max/min temperature) using a trained VAR model.
-
-## How to Run
-1. Make sure you have Python 3.8+ installed.
-2. Install dependencies:
-   ```sh
-   pip install streamlit requests pandas numpy scikit-learn statsmodels fastapi
-   ```
-3. Start the Streamlit app:
-   ```sh
-   streamlit run app.py
-   ```
-4. (Optional) Start the FastAPI backend for database and API access:
-   ```sh
-   uvicorn weather_api:app --reload
-   ```
-
-## Data & Model
-- Historical weather data is pulled from Open-Meteo and stored in `weather.db` (SQLite).
-- The VAR model is trained on the stored data and used for 7-day forecasts.
-
-## API Used
-- [Open-Meteo API](https://open-meteo.com/)
+A full-stack data science project that fetches, stores, models, and forecasts weather data for Johannesburg using Open-Meteo API, SQLite, VAR models, and a Streamlit dashboard.
 
 ---
+
+## 📊 Project Overview
+
+This app:
+- Pulls **historical** and **real-time weather data** for Johannesburg from the [Open-Meteo API](https://open-meteo.com).
+- Stores the data in a **local SQLite database**.
+- Trains a **Vector AutoRegressive (VAR)** model to forecast multiple weather features.
+- Displays current, past, and **7-day weather forecasts** in an interactive **Streamlit dashboard**.
+
+---
+
+## 🚀 Features
+
+✅ Real-time **current weather**  
+✅ Historical data collection (since 2005)  
+✅ **Automated ETL** using FastAPI  
+✅ 7-day weather forecast using **VAR** model  
+✅ Visualisation of key weather metrics  
+✅ Deployable on **Streamlit Cloud**
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+A[FastAPI] --> B[SQLite Database]
+B --> C[Model Trainer (VAR)]
+C --> D[Pickled Model]
+B --> E[Streamlit App]
+D --> E
+```
+## 🔧 Tech Stack
+Layer	Tools
+API	FastAPI
+Database	SQLite
+Data Access	Open-Meteo API
+ML Model	VAR (via statsmodels)
+Frontend	Streamlit
+Deployment	Streamlit Cloud
+Data Handling	pandas, numpy
+
+## 🧠 Model Info
+The project uses a Vector AutoRegressive (VAR) model to predict the following weather features over the next 7 days:
+
+Max & Min Temperature
+
+Wind Speed
+
+Wind Direction
+
+Precipitation
+
+## 🗂️ File Structure
+```
+weather-app/
+├── app.py               # Streamlit dashboard
+├── model.py             # VAR model training + prediction logic
+├── weather_api.py       # FastAPI ETL to fetch and save data
+├── weather.db           # SQLite database (created on first run)
+├── var_model_latest.pkl # Trained VAR model (auto-generated)
+├── requirements.txt     # Python dependencies
+└── README.md            # You're here 😎
+```
+
+## 🚦 How to Run Locally
+1. Clone the repo
+```
+git clone https://github.com/your-username/weather-app.git
+cd weather-app
+```
+2. Install dependencies
+```
+pip install -r requirements.txt
+```
+
+3. Run the FastAPI ETL
+```
+uvicorn weather_api:app --reload
+```
+4. Run the Streamlit App
+```
+streamlit run app.py
+```
+## ☁️ Streamlit Cloud Deployment
+The app is also deployed on Streamlit Cloud:
+
+👉 [Live Demo](https://weather-app-aq5opgjg3fesucfkd4kkbu.streamlit.app)
+
+## 📈 Future Improvements
+Add more ML models (e.g. LSTM, XGBoost) for comparison
+
+Store & analyse hourly weather data
+
+Add user input for custom city selection
+
+Deploy the FastAPI backend separately with a scheduler or use Airflow to automate the data pull
+
+## 🧑‍💻 Author
+Thomas Karabo Mohlapo
+📍 South Africa | ☁️ Weather & Data Enthusiast
+LinkedIn | GitHub
+
