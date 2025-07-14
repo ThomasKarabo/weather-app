@@ -3,7 +3,6 @@ import pandas as pd
 from statsmodels.tsa.api import VAR
 from sklearn.metrics import mean_squared_error
 import numpy as np
-from IPython.display import display
 import sqlite3
 
 
@@ -119,4 +118,4 @@ if trained_model_today:
 
     if future_predictions_production is not None:
         print("\nFuture Predictions (simulated production):")
-        display(future_predictions_production)
+        print(future_predictions_production)
