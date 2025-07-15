@@ -7,7 +7,7 @@ import sqlite3
 
 
 
-db_path = r'weather.db'
+db_path = r'C:\Users\Thomas.Mohlapo\OneDrive - 9475042 - Tshela Health Care\Documents\Weather App\weather.db'
 conn = sqlite3.connect(db_path)
 query = "SELECT * FROM jhb_weather"
 df = pd.read_sql_query(query, conn)
@@ -75,7 +75,7 @@ def predict_with_var_model(model_path, recent_data_input, forecast_steps, last_k
         future_predictions_values = model_fitted.forecast(y=recent_data_input, steps=forecast_steps)
 
         # Create a date index for the future period based on the last known date
-        future_dates = pd.date_range(start=last_known_date + pd.Timedelta(days=1), periods=forecast_steps, freq='D')
+        future_dates = pd.date_range(start=last_known_date + pd.Timedelta(days=3), periods=forecast_steps, freq='D')
 
         # Use the column names from the fitted model
         predicted_future_df = pd.DataFrame(future_predictions_values, index=future_dates, columns=model_fitted.model.endog_names)
