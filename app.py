@@ -3,10 +3,13 @@ import requests
 from datetime import datetime, timedelta
 import pandas as pd
 from model import predict_with_var_model
+from run_pipeline import pipeline
 import sqlite3
 import numpy as np
 import os
 
+# Run the FastAPI and train the model
+pipeline()
 
 # Calculate yesterday's date
 now = datetime.now()
