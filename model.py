@@ -7,7 +7,7 @@ import sqlite3
 
 
 
-db_path = r'C:\Users\Thomas.Mohlapo\OneDrive - 9475042 - Tshela Health Care\Documents\Weather App\weather.db'
+db_path = r'weather.db'
 conn = sqlite3.connect(db_path)
 query = "SELECT * FROM jhb_weather"
 df = pd.read_sql_query(query, conn)
