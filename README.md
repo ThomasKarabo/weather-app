@@ -28,7 +28,6 @@ This app:
 ## 🏗️ Architecture
 
 ```mermaid
-graph TD
 A[FastAPI] --> B[SQLite Database]
 B --> C[Model Trainer (VAR)]
 C --> D[Pickled Model]
