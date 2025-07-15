@@ -29,11 +29,11 @@ This app:
 
 ```mermaid
 graph TD
-A[FastAPI] --> B[SQLite Database]
-B --> C[Model Trainer (VAR)]
-C --> D[Pickled Model]
-B --> E[Streamlit App]
-D --> E
+    A[FastAPI] --> B[SQLite Database]
+    B --> C[Model Trainer VAR]
+    C --> D[Pickled Model]
+    B --> E[Streamlit App]
+    D --> E
 ```
 ## 🔧 Tech Stack
 Layer	Tools
