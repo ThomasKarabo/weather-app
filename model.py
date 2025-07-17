@@ -64,10 +64,7 @@ def predict_with_var_model(model_path, recent_data_input, forecast_steps, last_k
         with open(model_path, 'rb') as f:
             model_fitted = pickle.load(f)
 
-        # Ensure the input data has the correct shape for the model
         lag_order = model_fitted.k_ar
-        # print(f"Expected input shape: {lag_order}, {model_fitted.nobs}") # Debugging
-        # print(f"Actual input shape: {recent_data_input.shape[0]}, {recent_data_input.shape[1]}") # Debugging
         if recent_data_input.shape[0] != lag_order:
              print(f"Error: Input data shape mismatch. Expected {lag_order} rows, got {recent_data_input.shape[0]}")
              return None
@@ -91,8 +88,6 @@ def predict_with_var_model(model_path, recent_data_input, forecast_steps, last_k
 # Example usage in a simulated production flow:
 
 # --- Simulate daily data update and retraining ---
-# In a real scenario, this would be a scheduled job
-# Let's assume 'df' now contains data up to today
 full_data_today = df.dropna() # Assume df has been updated with new data
 
 # Train the model on the full data
@@ -101,8 +96,6 @@ trained_model_today = train_var_model(full_data_today, order=5, save_path='var_m
 # --- Simulate making a prediction later ---
 # In a real scenario, this would be a separate prediction service
 if trained_model_today:
-    # Get the last lag_order values from the full dataset as input for forecasting
-    # In production, this would be the last 'lag_order' rows from your live data source
     lag_order_latest = trained_model_today.k_ar
     recent_data_for_forecast = full_data_today.values[-lag_order_latest:]
     last_date_in_data = full_data_today.index[-1] # Get the actual last date from your data
