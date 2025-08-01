@@ -34,7 +34,13 @@ def train_var_model(data, order, save_path=None):
     """
     try:
         model = VAR(data)
-        model_fitted = model.fit(order)
+
+        # Automatically select best lag based on AIC
+        results = model.select_order(maxlags=15)
+        best_lag = results.aic
+
+        # Fit final model using best lag
+        model_fitted = model.fit(best_lag)
 
         if save_path:
             with open(save_path, 'wb') as f:
@@ -64,7 +70,10 @@ def predict_with_var_model(model_path, recent_data_input, forecast_steps, last_k
         with open(model_path, 'rb') as f:
             model_fitted = pickle.load(f)
 
+        # Ensure the input data has the correct shape for the model
         lag_order = model_fitted.k_ar
+        # print(f"Expected input shape: {lag_order}, {model_fitted.nobs}") # Debugging
+        # print(f"Actual input shape: {recent_data_input.shape[0]}, {recent_data_input.shape[1]}") # Debugging
         if recent_data_input.shape[0] != lag_order:
              print(f"Error: Input data shape mismatch. Expected {lag_order} rows, got {recent_data_input.shape[0]}")
              return None
@@ -72,7 +81,7 @@ def predict_with_var_model(model_path, recent_data_input, forecast_steps, last_k
         future_predictions_values = model_fitted.forecast(y=recent_data_input, steps=forecast_steps)
 
         # Create a date index for the future period based on the last known date
-        future_dates = pd.date_range(start=last_known_date + pd.Timedelta(days=3), periods=forecast_steps, freq='D')
+        future_dates = pd.date_range(start=last_known_date + pd.Timedelta(days=1), periods=forecast_steps, freq='D')
 
         # Use the column names from the fitted model
         predicted_future_df = pd.DataFrame(future_predictions_values, index=future_dates, columns=model_fitted.model.endog_names)
@@ -84,31 +93,3 @@ def predict_with_var_model(model_path, recent_data_input, forecast_steps, last_k
     except Exception as e:
         print(f"Error during prediction: {e}")
         return None
-
-# Example usage in a simulated production flow:
-
-# --- Simulate daily data update and retraining ---
-full_data_today = df.dropna() # Assume df has been updated with new data
-
-# Train the model on the full data
-trained_model_today = train_var_model(full_data_today, order=5, save_path='var_model_latest.pkl')
-
-# --- Simulate making a prediction later ---
-# In a real scenario, this would be a separate prediction service
-if trained_model_today:
-    lag_order_latest = trained_model_today.k_ar
-    recent_data_for_forecast = full_data_today.values[-lag_order_latest:]
-    last_date_in_data = full_data_today.index[-1] # Get the actual last date from your data
-
-    # Make a forecast for the next 7 days
-    forecast_steps_production = 7
-    future_predictions_production = predict_with_var_model(
-        model_path='var_model_latest.pkl',
-        recent_data_input=recent_data_for_forecast,
-        forecast_steps=forecast_steps_production,
-        last_known_date=last_date_in_data # Pass the last known date
-    )
-
-    if future_predictions_production is not None:
-        print("\nFuture Predictions (simulated production):")
-        print(future_predictions_production)
