@@ -124,9 +124,9 @@ try:
     data = response.json()
     hourly = data.get("hourly", {})
     times = hourly.get("time", [])
-    temps = int(hourly.get("temperature_2m", []))
-    windspeeds = int(hourly.get("windspeed_10m", []))
-    winddirs = int(hourly.get("winddirection_10m", []))
+    temps = hourly.get("temperature_2m", [])
+    windspeeds = hourly.get("windspeed_10m", [])
+    winddirs = hourly.get("winddirection_10m", [])
 
     # Prepare data for table
     display_hours = ["00:00", "06:00", "12:00", "18:00"]
@@ -138,7 +138,7 @@ try:
         dt_str = f"{yesterday_str}T{hour}"
         if dt_str in times:
             idx = times.index(dt_str)
-            temp_row.append(temps[idx] if idx < len(temps) else None)
+            temp_row.append(int(temps[idx]) if idx < len(temps) else None)
             windspeed_row.append(windspeeds[idx] if idx < len(windspeeds) else None)
             winddir_row.append(winddirs[idx] if idx < len(winddirs) else None)
         else:
@@ -155,6 +155,7 @@ try:
     st.table(table)
 except Exception as e:
     st.error(f"Failed to fetch yesterday's weather data: {e}")
+
 
 
 
