@@ -124,9 +124,9 @@ try:
     data = response.json()
     hourly = data.get("hourly", {})
     times = hourly.get("time", [])
-    temps = hourly.get("temperature_2m", [])
-    windspeeds = hourly.get("windspeed_10m", [])
-    winddirs = hourly.get("winddirection_10m", [])
+    temps = int(hourly.get("temperature_2m", []))
+    windspeeds = int(hourly.get("windspeed_10m", []))
+    winddirs = int(hourly.get("winddirection_10m", []))
 
     # Prepare data for table
     display_hours = ["00:00", "06:00", "12:00", "18:00"]
@@ -147,12 +147,13 @@ try:
             winddir_row.append(None)
 
     table = pd.DataFrame({
-        hour_labels[0]: int([temp_row[0]), int(windspeed_row[0]), int(winddir_row[0])],
-        hour_labels[1]: int([temp_row[1]), int(windspeed_row[1]), int(winddir_row[1])],
-        hour_labels[2]: int([temp_row[2]), int(windspeed_row[2]), int(winddir_row[2])],
-        hour_labels[3]: int([temp_row[3]), int(windspeed_row[3]), int(winddir_row[3])],
+        hour_labels[0]: [temp_row[0], windspeed_row[0], winddir_row[0]],
+        hour_labels[1]: [temp_row[1), windspeed_row[1], winddir_row[1]],
+        hour_labels[2]: [temp_row[2], windspeed_row[2], winddir_row[2]],
+        hour_labels[3]: [temp_row[3], windspeed_row[3], winddir_row[3]],
     }, index=["Temperature (°C)", "Windspeed (km/h)", "Wind Direction (°)"])
     st.table(table)
 except Exception as e:
     st.error(f"Failed to fetch yesterday's weather data: {e}")
+
 
